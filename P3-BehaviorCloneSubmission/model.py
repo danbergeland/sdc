@@ -116,7 +116,7 @@ if __name__ == '__main__':
     model = makeModel()
     print(model.summary())
     trainSamplesPerEpoch = 100
-    epochs = 5
+    epochs = 20
     batch_size = 128
     jenny = generateFromDriveData(batch_size)
     valJenny = generateFromDriveData(batch=1,valData=True)
