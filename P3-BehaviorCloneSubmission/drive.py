@@ -18,7 +18,8 @@ from cv2 import resize,cvtColor, COLOR_RGB2HSV
 
 # Fix error with Keras and TensorFlow
 import tensorflow as tf
-tf.python.control_flow_ops = tf
+from tensorflow.python.ops import control_flow_ops as tf_control_flow_ops
+#tf.python.control_flow_ops = tf
 
 def processImg(img):
     #img is 160 x 320

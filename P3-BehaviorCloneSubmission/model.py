@@ -39,7 +39,7 @@ with open(training_file,'r') as f:
     reader = csv.reader(f, delimiter=',') 
     data = list(reader)
     #split 10% training data
-    tsplit = floor(len(data)*.1)
+    tsplit = int(floor(len(data)*.1))
     np.random.shuffle(data)
     val,train = data[:tsplit],data[tsplit:]
     
@@ -114,15 +114,15 @@ def makeModel():
 if __name__ == '__main__':
     model = makeModel()
     print(model.summary())
-    trainSamplesPerEpoch = 40224
-    epochs = 1
+    trainSamplesPerEpoch = 10000
+    epochs = 2
     batch_size = 256
     jenny = generateFromDriveData(batch_size)
     valJenny = generateFromDriveData(batch=1,valData=True)
     history = model.fit_generator(jenny, samples_per_epoch=trainSamplesPerEpoch, nb_epoch=epochs, validation_data=valJenny, nb_val_samples=1000)
 
     jModel = model.to_json()
-    with open('model.json', 'w') as outfile:
+    with open('drivemodel.json', 'w') as outfile:
         json.dump(jModel, outfile)
-    model.save_weights('model.h5')
+    model.save_weights('drivemodel.h5')
 
