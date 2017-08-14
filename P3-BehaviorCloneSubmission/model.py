@@ -37,7 +37,8 @@ def processImg(imgPath, flipDis=False):
 
 with open(training_file,'r') as f:
     reader = csv.reader(f, delimiter=',') 
-    data = list(reader)
+    data = list(reader)[1:]
+    
     #split 10% training data
     tsplit = int(floor(len(data)*.1))
     np.random.shuffle(data)
@@ -63,7 +64,7 @@ def generateFromDriveData(batch=64,valData=False):
                 while abs(y) <= angleSelect:
                     lineNum = np.random.randint(len(train))
                     line = train[lineNum]
-                    img1path = line[sideSelect].lstrip()
+                    img1path = 'data//'+line[sideSelect].lstrip()
                     y = float(line[3])+steerOffset
 
                 #flip image and y value on every other image
@@ -85,7 +86,7 @@ def generateFromDriveData(batch=64,valData=False):
         else:
             lineNum = np.random.randint(len(val))
             line = val[lineNum]
-            img1path = line[0]
+            img1path = 'data//'+line[0]
             img = processImg(img1path)
             y = float(line[3])
             yield np.array([img]),np.reshape(np.array([y]),[-1,1])
@@ -114,9 +115,9 @@ def makeModel():
 if __name__ == '__main__':
     model = makeModel()
     print(model.summary())
-    trainSamplesPerEpoch = 10000
-    epochs = 2
-    batch_size = 256
+    trainSamplesPerEpoch = 100
+    epochs = 5
+    batch_size = 128
     jenny = generateFromDriveData(batch_size)
     valJenny = generateFromDriveData(batch=1,valData=True)
     history = model.fit_generator(jenny, samples_per_epoch=trainSamplesPerEpoch, nb_epoch=epochs, validation_data=valJenny, nb_val_samples=1000)
